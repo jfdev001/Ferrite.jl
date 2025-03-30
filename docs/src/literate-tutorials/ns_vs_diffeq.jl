@@ -83,34 +83,71 @@ nothing                    #hide
 # !!! details "Extra details on the semi-discrete weak form"
 #     For completeness, we show a step by step derivation of the semi-discrete
 #     weak form of the Navier-Stokes equations. We multiply the first equation
-#     by a test function $\varphi$ that is a vector field and the second equation
-#     by a test function $\psi$ that is a scalar field,
+#     by a suitable test function $\varphi$ that is a vector field and the
+#     second equation by a suitable test function $\psi$ that is a scalar field,
 #
-#     TODO.
-#
-#     To reduce the order of the spatial derivatives, we use integration by
-#     parts on the Laplacian. Naturally, since integration by parts is derived
+#     ```math
+#     \begin{aligned}
+#     \int_{\Omega} \partial_t v \cdot \varphi &= \int_{\Omega} \nu \nabla \cdot \nabla v \cdot \varphi - \int_{\Omega} (v \cdot \nabla) v \cdot \varphi - \int_{\Omega} \nabla p \cdot \varphi, \\
+#                0 &= \int_{\Omega} (\nabla \cdot v) \psi,
+#     \end{aligned}
+#     ```
+#     where $\Delta \equiv \nabla \cdot \nabla$. To reduce the order of the
+#     spatial derivatives, we use integration by
+#     parts on the viscosity term. Naturally, since integration by parts is derived
 #     from the product rule of differentiation, it is useful to consider the
-#     vector calculus identity
+#     (slightly rearranged) [vector calculus identity](https://en.wikipedia.org/wiki/Vector_calculus_identities#Divergence_2)
 #
-#     TODO,
+#     ```math
+#     \nabla \cdot (\vec{A} u) = (\nabla \cdot \vec{A}) u + \vec{A} \cdot \nabla u,
+#     ```
 #
-#     though in this problem's case, we must adapt this identity due to the
-#     presence of second order tensors arising from the gradient operator
-#     on the vector fields $v$ and $\varphi$. Given the higher dimensional
-#     nature of the problem, we use index notation (see TODO Primer on indexc
-#     notation) to transform the problem appropriately.
+#     for a scalar field $u$ and vector field $\vec{A}$. For the viscosity term, we
+#     cannot use this exact identity since $v$ and $\varphi$ are both vector fields.
+#     Given this difference, we write the gradient, divergence, and Laplacian
+#     using index notation (see
+#     [Primer on Index Notation](http://complex.gmu.edu/www-phys/phys705/notes/tensor%20index%20notation.pdf) and
+#     [Weak Form for Navier-Stokes with Chorin's Projection](https://youtu.be/JBmS--3L2eQ?si=cEV_EdlVGp090kta))
+#     where $\nabla v$ is analogous to $\vec{A}$ and $\varphi$ is analogous to $u$
+#     such that
 #
-#     TODO.
+#     ```math
+#     \frac{\partial}{\partial x_j} \left(\frac{\partial v_i}{\partial x_j} \varphi_i \right) = \left(\frac{\partial^2 v_i}{\partial x_j \partial x_j} \right) \varphi_i + \frac{\partial v_i}{\partial x_j} \frac{\partial \varphi_i}{\partial x_j}.
+#     ```
+#     Note that we omit $\nu$ above to make the approximate mapping between the
+#     vector calculus identity and the index notation clearer. The index notation
+#     here is particularly useful since, by definition, the
+#     gradient $\nabla \equiv \frac{\partial }{\partial x_j}$ of a tensor field of
+#     order $k$ is a tensor field of order $k+1$, so the term
 #
-#     The index notation is converted back to vector notation, and the product
-#     operation between the two second order tensors is defined by a [double
-#     contraction](TODO tensors jl). As usual, we apply the [divergence theorem],
+#     ```math
+#     \frac{\partial v_i}{\partial x_j} \frac{\partial \varphi_i}{\partial x_j},
+#     ```
 #
-#     TODO,
+#     can be understood as a product between two second order tensors.
+#     Such a product is called a [double contraction](https://ferrite-fem.github.io/Tensors.jl/stable/man/binary_operators/#Double-contraction) and can be represented by
+#     the $:$ operator. Thus, we rewrite the product rule for the viscosity term
+#     in vector notation and include the integrals on the domain $\Omega$ such
+#     that
 #
-#     where $\mathbf{F} = TODO$, and note from the definition of the
-#     [normal derivative](TODO) that the equivalence...
+#     ```math
+#     \begin{aligned}
+#     \int_{\Omega} \nabla \cdot (\nu \nabla v \cdot \varphi) &= \int_{\Omega} \nu \nabla \cdot \nabla v \cdot \varphi + \int_{\Omega} \nabla v : \nabla \varphi, \\
+#     \int_{\Omega} \nabla \cdot (\nu \nabla v \cdot \varphi) - \int_{\Omega} \nabla v : \nabla \varphi &= \int_{\Omega} \nu \nabla \cdot \nabla v \cdot \varphi.
+#     \end{aligned}
+#     ```
+#     Since $\nu \nabla v \cdot \varphi$ is a vector field, we can apply the
+#     [divergence theorem](https://en.wikipedia.org/wiki/Divergence_theorem)
+#     such that
+#
+#     ```math
+#     \begin{aligned}
+#     \int_{\Omega} \nabla \cdot (\nu \nabla v \cdot \varphi) &= \int_{\partial \Omega} \nu \nabla v \cdot \varphi \cdot n, \\
+#         &= \int_{\partial \Omega} \nu \partial_n v \cdot \varphi,
+#     \end{aligned}
+#     ```
+#     and rewrite the RHS using the commutativity of the dot product as well as
+#     the definition of the [normal derivative](https://en.wikipedia.org/wiki/Directional_derivative#Normal_derivative).
 #
 #     To formulate the operator matrix, we can frame the problem as a
 #     linear saddle point (find ref for this... thesis? delft?)
