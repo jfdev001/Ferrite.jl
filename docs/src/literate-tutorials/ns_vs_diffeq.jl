@@ -80,6 +80,54 @@ nothing                    #hide
 # ```
 # for all possible test functions from the suitable space.
 #
+# !!! details "Extra details on the semi-discrete weak form"
+#     For completeness, we show a step by step derivation of the semi-discrete
+#     weak form of the Navier-Stokes equations. We multiply the first equation
+#     by a test function $\varphi$ that is a vector field and the second equation
+#     by a test function $\psi$ that is a scalar field,
+#
+#     TODO.
+#
+#     To reduce the order of the spatial derivatives, we use integration by
+#     parts on the Laplacian. Naturally, since integration by parts is derived
+#     from the product rule of differentiation, it is useful to consider the
+#     vector calculus identity
+#
+#     TODO,
+#
+#     though in this problem's case, we must adapt this identity due to the
+#     presence of second order tensors arising from the gradient operator
+#     on the vector fields $v$ and $\varphi$. Given the higher dimensional
+#     nature of the problem, we use index notation (see TODO Primer on indexc
+#     notation) to transform the problem appropriately.
+#
+#     TODO.
+#
+#     The index notation is converted back to vector notation, and the product
+#     operation between the two second order tensors is defined by a [double
+#     contraction](TODO tensors jl). As usual, we apply the [divergence theorem],
+#
+#     TODO,
+#
+#     where $\mathbf{F} = TODO$, and note from the definition of the
+#     [normal derivative](TODO) that the equivalence...
+#
+#     To formulate the operator matrix, we can frame the problem as a
+#     linear saddle point (find ref for this... thesis? delft?)
+#     problem a() + n() + b = ...
+#                                             b = ...
+#     and therefore we use the vector calculus identity
+#
+#     TODO \nabla p \cdot p t o p (\nabla \cdot \varphi),
+#
+#     apply the divergence theorem again,
+#
+#     and then substitute into the original weak form of the equation while
+#     combining the surface integrals. Then, we know from the outflow boundary
+#     condition that the surface normal is 0 (is this natural neumann
+#     boundary??... is this the only one we care about? Is the whole boundary
+#     0 on the dirichlet conditions... yes that would be the case...
+#
 # Now we can discretize the problem as usual with the finite element method
 # utilizing Taylor-Hood elements (Q2Q1) to yield a stable discretization in
 # mass matrix form:
