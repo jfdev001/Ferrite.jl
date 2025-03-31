@@ -83,8 +83,9 @@ nothing                    #hide
 # !!! details "Extra details on the semi-discrete weak form"
 #     For completeness, we show a step by step derivation of the semi-discrete
 #     weak form of the Navier-Stokes equations. We multiply the first equation
-#     by a suitable test function $\varphi$ that is a vector field and the
-#     second equation by a suitable test function $\psi$ that is a scalar field,
+#     (i.e., conservation of momentum) by a suitable test function $\varphi$
+#     that is a vector field and the second equation (i.e., conservation of mass)
+#     by a suitable test function $\psi$ that is a scalar field,
 #
 #     ```math
 #     \begin{aligned}
@@ -127,18 +128,19 @@ nothing                    #hide
 #     can be understood as a product between two second order tensors.
 #     Such a product is called a [double contraction](https://ferrite-fem.github.io/Tensors.jl/stable/man/binary_operators/#Double-contraction) and can be represented by
 #     the $:$ operator. Thus, we rewrite the product rule for the viscosity term
-#     in vector notation and include the integrals on the domain $\Omega$ such
-#     that
+#     in vector notation, include the $\nu$, and reintroduce integrals on the
+#     domain $\Omega$ such that
 #
 #     ```math
 #     \begin{aligned}
-#     \int_{\Omega} \nabla \cdot (\nu \nabla v \cdot \varphi) &= \int_{\Omega} \nu \nabla \cdot \nabla v \cdot \varphi + \int_{\Omega} \nabla v : \nabla \varphi, \\
-#     \int_{\Omega} \nabla \cdot (\nu \nabla v \cdot \varphi) - \int_{\Omega} \nabla v : \nabla \varphi &= \int_{\Omega} \nu \nabla \cdot \nabla v \cdot \varphi.
+#     \int_{\Omega} \nabla \cdot (\nu \nabla v \cdot \varphi) &= \int_{\Omega} \nu \nabla \cdot \nabla v \cdot \varphi + \int_{\Omega} \nu \nabla v : \nabla \varphi, \\
+#     \int_{\Omega} \nabla \cdot (\nu \nabla v \cdot \varphi) - \int_{\Omega} \nu \nabla v : \nabla \varphi &= \int_{\Omega} \nu \nabla \cdot \nabla v \cdot \varphi.
 #     \end{aligned}
 #     ```
 #     Since $\nu \nabla v \cdot \varphi$ is a vector field, we can apply the
 #     [divergence theorem](https://en.wikipedia.org/wiki/Divergence_theorem)
-#     such that
+#     and rewrite the RHS using the commutativity of the dot product as well as
+#     the definition of the [normal derivative](https://en.wikipedia.org/wiki/Directional_derivative#Normal_derivative).
 #
 #     ```math
 #     \begin{aligned}
@@ -146,24 +148,42 @@ nothing                    #hide
 #         &= \int_{\partial \Omega} \nu \partial_n v \cdot \varphi,
 #     \end{aligned}
 #     ```
-#     and rewrite the RHS using the commutativity of the dot product as well as
-#     the definition of the [normal derivative](https://en.wikipedia.org/wiki/Directional_derivative#Normal_derivative).
 #
-#     To formulate the operator matrix, we can frame the problem as a
-#     linear saddle point (find ref for this... thesis? delft?)
-#     problem a() + n() + b = ...
-#                                             b = ...
-#     and therefore we use the vector calculus identity
+#     We further simplify the weak form by considering the pressure term of the
+#     conservation of momentum equation by applying the vector calculus identity
+#     directly, rearranging, and including the integrals on the domain such that
 #
-#     TODO \nabla p \cdot p t o p (\nabla \cdot \varphi),
+#     ```math
+#     \begin{aligned}
+#     - \int_{\Omega} \nabla \cdot (p \varphi) &= - \int_{\Omega} \nabla p \cdot \varphi - \int_{\Omega} p \nabla \cdot \varphi, \\
+#     - \int_{\Omega} \nabla \cdot (p \varphi) + \int_{\Omega} p (\nabla \cdot \varphi) &= - \int_{\Omega } \nabla p \cdot \varphi,
+#     \end{aligned}
+#     ```
+#     Once again, we apply the divergence theorem
 #
-#     apply the divergence theorem again,
+#     ```math
+#     - \int_{\Omega} \nabla \cdot (p \varphi) = - \int_{\partial \Omega} pn \cdot \varphi.
+#     ```
 #
-#     and then substitute into the original weak form of the equation while
-#     combining the surface integrals. Then, we know from the outflow boundary
-#     condition that the surface normal is 0 (is this natural neumann
-#     boundary??... is this the only one we care about? Is the whole boundary
-#     0 on the dirichlet conditions... yes that would be the case...
+#     We substitute our simplifications into the weak form provided
+#     at the beginning of this extra details section and combine the integrals
+#     on the boundary such that
+#
+#     ```math
+#     \begin{aligned}
+#     \int_{\Omega} \partial_t v \cdot \varphi &= - \int_{\Omega} \nu \nabla v : \nabla \varphi - \int_{\Omega} (v \cdot \nabla) v \cdot \varphi - \int_{\Omega} p(\nabla \cdot \varphi) + \int_{\partial \Omega} (\nu \partial_n v - pn) \cdot \varphi, \\
+#                0 &= \int_{\Omega} (\nabla \cdot v) \psi.
+#     \end{aligned}
+#     ```
+#
+#     TODO: Obviously do-nothing boudnary condition on right side of domain
+#     means surface integral goes to 0... but what about rest of
+#     domain? Can we assert something like $\varphi \in H^{1}_{0}$ so 0
+#     where Dirichlet conditions are specified?
+#
+#     TODO: Maybe mention something about saddle point and bilinear forms?
+#     Could be overkill. Could mention
+#     [Numerical Methods for Saddle Point Problems](https://page.math.tu-berlin.de/~liesen/Publicat/BenGolLie05.pdf) for some further readings?
 #
 # Now we can discretize the problem as usual with the finite element method
 # utilizing Taylor-Hood elements (Q2Q1) to yield a stable discretization in
