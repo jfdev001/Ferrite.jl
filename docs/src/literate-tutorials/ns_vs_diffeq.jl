@@ -128,7 +128,7 @@ nothing                    #hide
 #     can be understood as a product between two second order tensors.
 #     Such a product is called a [double contraction](https://ferrite-fem.github.io/Tensors.jl/stable/man/binary_operators/#Double-contraction) and can be represented by
 #     the $:$ operator. Thus, we rewrite the product rule for the viscosity term
-#     in vector notation, include the $\nu$, and reintroduce integrals on the
+#     in vector notation, include $\nu$, and reintroduce integrals on the
 #     domain $\Omega$ such that
 #
 #     ```math
@@ -140,12 +140,12 @@ nothing                    #hide
 #     Since $\nu \nabla v \cdot \varphi$ is a vector field, we can apply the
 #     [divergence theorem](https://en.wikipedia.org/wiki/Divergence_theorem)
 #     and rewrite the RHS using the commutativity of the dot product as well as
-#     the definition of the [normal derivative](https://en.wikipedia.org/wiki/Directional_derivative#Normal_derivative).
+#     the definition of the [normal derivative](https://en.wikipedia.org/wiki/Directional_derivative#Normal_derivative) as
 #
 #     ```math
 #     \begin{aligned}
-#     \int_{\Omega} \nabla \cdot (\nu \nabla v \cdot \varphi) &= \int_{\partial \Omega} \nu \nabla v \cdot \varphi \cdot n, \\
-#         &= \int_{\partial \Omega} \nu \partial_n v \cdot \varphi,
+#     \int_{\Omega} \nabla \cdot (\nu \nabla v \cdot \varphi) &= \int_{\partial \Omega} \nu \nabla v \cdot \varphi \cdot n \\
+#         &= \int_{\partial \Omega} \nu \partial_n v \cdot \varphi.
 #     \end{aligned}
 #     ```
 #
@@ -156,7 +156,7 @@ nothing                    #hide
 #     ```math
 #     \begin{aligned}
 #     - \int_{\Omega} \nabla \cdot (p \varphi) &= - \int_{\Omega} \nabla p \cdot \varphi - \int_{\Omega} p \nabla \cdot \varphi, \\
-#     - \int_{\Omega} \nabla \cdot (p \varphi) + \int_{\Omega} p (\nabla \cdot \varphi) &= - \int_{\Omega } \nabla p \cdot \varphi,
+#     - \int_{\Omega} \nabla \cdot (p \varphi) + \int_{\Omega} p (\nabla \cdot \varphi) &= - \int_{\Omega } \nabla p \cdot \varphi.
 #     \end{aligned}
 #     ```
 #     Once again, we apply the divergence theorem
@@ -176,14 +176,31 @@ nothing                    #hide
 #     \end{aligned}
 #     ```
 #
-#     TODO: Obviously do-nothing boudnary condition on right side of domain
-#     means surface integral goes to 0... but what about rest of
-#     domain? Can we assert something like $\varphi \in H^{1}_{0}$ so 0
-#     where Dirichlet conditions are specified?
+#     The integral on the boundary $\partial \Omega$ is the sum
+#     of the integrals on the boundary for which Neumann boundary conditions
+#     are specified denoted $\partial \Omega_N$ and the integral on the boundary
+#     for which Dirichlet boundary conditions are specified denoted
+#     $\partial \Omega_D$. Since we define a test space for the velocity $v$ such that
+#     $\varphi \in H^1_{E_0}$ (see [ch. 2.2. in He 2012](https://uu.diva-portal.org/smash/record.jsf?pid=diva2%3A544511&dswid=-3123)) where $H^{1}_{E_0}$ requires that
+#     $\varphi = 0$ on $\partial \Omega_D$, and given that the Neumann boundary
+#     condition is $\nu \partial_n v - pn = 0$, the boundary
+#     integral is eliminated so that the final weak form is
 #
+#     ```math
+#      \begin{aligned}
+#      \int_\Omega \partial_t v \cdot \varphi &= - \int_\Omega \nu \nabla v : \nabla \varphi - \int_\Omega (v \cdot \nabla) v \cdot \varphi + \int_\Omega p (\nabla \cdot \varphi) ,\\
+#      0 &= \int_\Omega (\nabla \cdot v) \psi.
+#      \end{aligned}
+#     ```
 #     TODO: Maybe mention something about saddle point and bilinear forms?
 #     Could be overkill. Could mention
-#     [Numerical Methods for Saddle Point Problems](https://page.math.tu-berlin.de/~liesen/Publicat/BenGolLie05.pdf) for some further readings?
+#     [Numerical Methods for Saddle Point Problems](https://page.math.tu-berlin.de/~liesen/Publicat/BenGolLie05.pdf) for some further readings? If mentioned, might be
+#     more appropriate after discretization section? And could mention
+#     how deal.ii step 57 states how the nonlinearity introduces complexity
+#     for the solution... so we take a simplified approach.... how would
+#     a sovle on the linear saddle point problem look like? Maybe this makes
+#     more sense to mention in a how-to/gallery?
+#
 #
 # Now we can discretize the problem as usual with the finite element method
 # utilizing Taylor-Hood elements (Q2Q1) to yield a stable discretization in
