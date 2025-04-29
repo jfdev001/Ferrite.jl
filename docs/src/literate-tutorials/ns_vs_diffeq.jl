@@ -103,6 +103,8 @@ nothing                    #hide
 #     \nabla \cdot (\vec{A} u) = (\nabla \cdot \vec{A}) u + \vec{A} \cdot \nabla u,
 #     ```
 #
+#     TODO: Could just write out using summation notation from Petsc book
+#
 #     for a scalar field $u$ and vector field $\vec{A}$. For the viscosity term, we
 #     cannot use this exact identity since $v$ and $\varphi$ are both vector fields.
 #     Given this difference, we write the gradient, divergence, and Laplacian
