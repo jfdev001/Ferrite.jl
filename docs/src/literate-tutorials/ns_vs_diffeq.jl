@@ -201,6 +201,9 @@ nothing                    #hide
 #     a sovle on the linear saddle point problem look like? Maybe this makes
 #     more sense to mention in a how-to/gallery?
 #
+#     Pg. 346 Bueller PETSc for PDEs on Frobenius Inner product (double contraction)
+#     could be used for showing `:` instead of the index notation (or both?)
+#
 #
 # Now we can discretize the problem as usual with the finite element method
 # utilizing Taylor-Hood elements (Q2Q1) to yield a stable discretization in
