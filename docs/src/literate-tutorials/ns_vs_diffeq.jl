@@ -103,7 +103,9 @@ nothing                    #hide
 #     \nabla \cdot (\vec{A} u) = (\nabla \cdot \vec{A}) u + \vec{A} \cdot \nabla u,
 #     ```
 #
-#     TODO: Could just write out using summation notation from Petsc book
+#     TODO: Could just write out using summation notation from Pg. 346 
+#     Bueller PETSc for PDEs on Frobenius Inner product (double contraction)
+#     could be used for showing `:` instead of the index notation (or both?)
 #
 #     for a scalar field $u$ and vector field $\vec{A}$. For the viscosity term, we
 #     cannot use this exact identity since $v$ and $\varphi$ are both vector fields.
@@ -202,10 +204,6 @@ nothing                    #hide
 #     for the solution... so we take a simplified approach.... how would
 #     a sovle on the linear saddle point problem look like? Maybe this makes
 #     more sense to mention in a how-to/gallery?
-#
-#     Pg. 346 Bueller PETSc for PDEs on Frobenius Inner product (double contraction)
-#     could be used for showing `:` instead of the index notation (or both?)
-#
 #
 # Now we can discretize the problem as usual with the finite element method
 # utilizing Taylor-Hood elements (Q2Q1) to yield a stable discretization in
